@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+        
+        input.field-error,
+        select.field-error {
+            border-color: #dc3545;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            padding: 5px;
+            background-color: #fff3cd;
+            border-radius: 3px;
+            display: block;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 10px 30px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-submit {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #da190b;
+        }
+        
+        .hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Task</h1>
+        
+        <form method="post" th:action="@{/tasks}" th:object="${taskItem}">
+            <div class="form-group">
+                <label for="title">Task Title <span style="color: red;">*</span></label>
+                <input type="text" 
+                       id="title" 
+                       th:field="*{title}" 
+                       placeholder="Enter task title"
+                       th:classappend="${#fields.hasErrors('title') ? 'field-error' : ''}">
+                <div th:if="${#fields.hasErrors('title')}" class="error-message">
+                    <span th:each="err : ${#fields.errors('title')}" th:text="${err}"></span>
+                </div>
+                <div class="hint">Minimum 5 characters required</div>
+            </div>
+            
+            <!-- Deadline Field -->
+            <div class="form-group">
+                <label for="deadline">Deadline <span style="color: red;">*</span></label>
+                <input type="date" 
+                       id="deadline" 
+                       th:field="*{deadline}"
+                       th:classappend="${#fields.hasErrors('deadline') ? 'field-error' : ''}">
+                <div th:if="${#fields.hasErrors('deadline')}" class="error-message">
+                    <span th:each="err : ${#fields.errors('deadline')}" th:text="${err}"></span>
+                </div>
+                <div class="hint">Must be a future date</div>
+            </div>
+            
+
+            <div class="form-group">
+                <label for="priority">Priority <span style="color: red;">*</span></label>
+                <select id="priority" 
+                        th:field="*{priority}"
+                        th:classappend="${#fields.hasErrors('priority') ? 'field-error' : ''}">
+                    <option value="">-- Select Priority --</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="LOW">LOW</option>
+                </select>
+                <div th:if="${#fields.hasErrors('priority')}" class="error-message">
+                    <span th:each="err : ${#fields.errors('priority')}" th:text="${err}"></span>
+                </div>
+            </div>
+            
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Save Task</button>
+                <a href="/tasks" style="display: inline-block; padding: 10px 30px; background-color: #f44336; color: white; text-decoration: none; border-radius: 4px; font-size: 14px;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
